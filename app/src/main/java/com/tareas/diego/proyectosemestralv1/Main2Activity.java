@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,7 +35,7 @@ public class Main2Activity extends AppCompatActivity {
     Button btn, btnComprar;
     ListView list1;
     TextView tv1;
-    final List<String> names = new ArrayList<>();
+    final ArrayList<Item> names = new ArrayList<Item>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class Main2Activity extends AppCompatActivity {
 
                                     //String PLACES_URL = "192.168.1.33:8080/item?id=606f8120891e42af86db0ae19e1f138c";
                                     //String PLACES_URL = "http://uinames.com/api/?amount=1";
-                                    String PLACES_URL = "http://192.168.43.240:8080/mail";
+                                    String PLACES_URL = "http://192.168.1.33:8080/mail";
                                     String LOG_TAG = "VolleyPlacesRemoteDS";
                                     // Instantiate the RequestQueue
                                     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -90,7 +91,7 @@ public class Main2Activity extends AppCompatActivity {
                                                 public void onResponse(JSONObject responsePlaces) {
                                                     names.clear();
                                                     list1 = findViewById(R.id.list1);
-                                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
+                                                    CustomAdapter adapter = new CustomAdapter(getApplicationContext(), R.layout.item_layout, names);
                                                     list1.setAdapter(adapter);
 
                                                     tv1 = findViewById(R.id.textView1);
@@ -148,18 +149,26 @@ public class Main2Activity extends AppCompatActivity {
                 if(result.size() > 0)
                 {
                     tv1 = findViewById(R.id.textView1);
+
+                    Typeface boldTypeface = Typeface.defaultFromStyle(Typeface.BOLD);
+                    tv1.setTypeface(boldTypeface);
+
                     String nombre = "";
+                    String imgUrl = "";
                     int precio = 0;
                     int totalParcial = 0;
-                    for(int i = 0; i < result.size()/2; i++)
+                    for(int i = 0; i < result.size()/3; i++)
                     {
-                        precio = Integer.parseInt(result.get((i*2)+1));
+                        precio = Integer.parseInt(result.get((i*3)+1));
                         totalParcial = totalParcial + precio;
-                        nombre = result.get(i*2)+".                  Precio: $"+String.valueOf(precio);
-                        names.add(nombre);
+                        nombre = result.get(i*3);
+                        imgUrl = result.get((i*3)+2);
+
+                       Item item = new Item(nombre, String.valueOf(precio), imgUrl);
+                        names.add(item);
                     }
                     list1 = findViewById(R.id.list1);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, names);
+                    CustomAdapter adapter = new CustomAdapter(this, R.layout.item_layout, names);
                     list1.setAdapter(adapter);
 
                     if(tv1.getText().toString().length() > 1)

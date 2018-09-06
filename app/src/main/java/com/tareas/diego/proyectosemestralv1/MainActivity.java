@@ -158,7 +158,7 @@ public class MainActivity extends CraftARActivity implements
 
             //String PLACES_URL = "192.168.1.33:8080/item?id=606f8120891e42af86db0ae19e1f138c";
             //String PLACES_URL = "http://uinames.com/api/?amount=1";
-            String PLACES_URL = "http://192.168.43.240:8080/item?id="+item.getItemId();
+            String PLACES_URL = "http://192.168.1.33:8080/item?id="+item.getItemId();
             String LOG_TAG = "VolleyPlacesRemoteDS";
             // Instantiate the RequestQueue
             RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -176,6 +176,7 @@ public class MainActivity extends CraftARActivity implements
                             try {
                                 myList.add(responsePlaces.getString("name"));
                                 myList.add(responsePlaces.getString("price"));
+                                myList.add(responsePlaces.getString("image"));
                                 Toast.makeText(MainActivity.this, "Encontrado: "+responsePlaces.getString("name"), Toast.LENGTH_SHORT).show();
 
                             } catch (JSONException e) {
